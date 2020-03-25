@@ -1,0 +1,8 @@
+{
+  "scope": "getnerdify",
+  "build": {
+    "env": {
+      "FONTAWESOME_NPM_TOKEN": "@fontawesome_npm_token"
+    }
+  }
+}

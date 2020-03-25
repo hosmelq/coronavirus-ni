@@ -1,0 +1,17 @@
+{
+  "background_color": "#6875f5",
+  "display": "standalone",
+  "name": "Coronavirus Nicaragua",
+  "orientation": "portrait",
+  "scope": "/",
+  "short_name": "COVID-19 NI",
+  "start_url": "/",
+  "theme_color": "#6875f5",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg"
+    }
+  ]
+}
