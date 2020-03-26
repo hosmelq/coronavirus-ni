@@ -1,14 +1,17 @@
 import Head from 'next/head'
 import React from 'react'
+import ReactGA from 'react-ga'
 import {CSSReset, ThemeProvider} from '@chakra-ui/core'
 
 import '../icons'
-import customTheme from '../customTheme'
+import theme from '../theme'
 import GlobalCSS from '../GlobalCSS'
+
+ReactGA.initialize(`UA-158975132-1`)
 
 export default function App({Component, pageProps}) {
   return (
-    <ThemeProvider theme={customTheme}>
+    <ThemeProvider theme={theme}>
       <Head>
         <title>Coronavirus Nicaragua</title>
         <meta
