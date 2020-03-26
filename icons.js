@@ -1,11 +1,27 @@
 import {library} from '@fortawesome/fontawesome-svg-core'
 
 import {
-  faChartBar as fadChartBar, // [`fad`, `chart-bar`]
-  faChartNetwork as fadChartNetwork, // [`fad`, `chart-network`]
-  faChartScatter as fadChartScatter, // [`fad`, `chart-scatter`]
   faVirus as fadVirus, // [`fad`, `virus`]
 } from '@fortawesome/pro-duotone-svg-icons'
 
+import {
+  faChartBar as falChartBar,
+  faCheckDouble as falCheckDouble,
+  faHeadSideCough as falHeadSideCough,
+  faLungsVirus as falLungsVirus,
+  faSkullCrossbones as falSkullCrossbones,
+  faSmile as falSmile,
+} from '@fortawesome/pro-light-svg-icons'
+
 // duotone
-library.add(fadChartBar, fadChartNetwork, fadChartScatter, fadVirus)
+library.add(fadVirus)
+
+// light
+library.add(
+  falChartBar,
+  falCheckDouble,
+  falHeadSideCough,
+  falLungsVirus,
+  falSmile,
+  falSkullCrossbones
+)

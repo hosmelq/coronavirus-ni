@@ -1,115 +1,16 @@
-import Head from 'next/head'
-import covid from 'novelcovid'
+import got from 'got'
 import React, {useEffect} from 'react'
 import ReactGA from 'react-ga'
-import {
-  Box,
-  Flex,
-  Grid,
-  Heading,
-  Link,
-  Stack,
-  Text,
-  useTheme,
-} from '@chakra-ui/core'
+import {Box, Grid, Heading, Link, Stack, useTheme} from '@chakra-ui/core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
-ReactGA.initialize(`UA-158975132-1`)
-
-function Stat({color, descriptionn, title, value}) {
-  const description = null
-
-  return (
-    <Flex bg="white" direction="column" rounded="md" shadow="sm">
-      <Stack
-        isInline
-        align="center"
-        borderBottomWidth={1}
-        borderColor="gray.100"
-        height="56px"
-        px={4}
-        spacing="auto"
-      >
-        <Heading
-          as="h3"
-          fontWeight="medium"
-          size="sm"
-          textTransform="uppercase"
-          whiteSpace="nowrap"
-        >
-          {title}
-        </Heading>
-        <Box as="span" color="indigo.500">
-          <FontAwesomeIcon fixedWidth icon={[`fad`, `chart-bar`]} size="lg" />
-        </Box>
-      </Stack>
-      <Text as="div" p={8} textAlign="center">
-        <Text
-          as="div"
-          color={color}
-          fontSize="4xl"
-          fontWeight="medium"
-          lineHeight="none"
-        >
-          {new Intl.NumberFormat(`es-NI`).format(value)}
-        </Text>
-        {description && (
-          <Text fontWeight="medium" mt={2}>
-            {description}
-          </Text>
-        )}
-      </Text>
-    </Flex>
-  )
-}
-
-function StatToday({cases, deaths}) {
-  return (
-    <Flex
-      bg="indigo.500"
-      color="white"
-      direction="column"
-      rounded="md"
-      shadow="sm"
-    >
-      <Flex
-        align="center"
-        borderBottomWidth={1}
-        borderColor="whiteAlpha.300"
-        height="56px"
-        px={4}
-      >
-        <Heading
-          as="h3"
-          fontWeight="medium"
-          size="sm"
-          textTransform="uppercase"
-        >
-          Estadísticas de hoy
-        </Heading>
-      </Flex>
-
-      <Flex align="center" flex={1} px={4} py={4}>
-        <Box flex={1}>
-          <Box fontSize="2xl" fontWeight="medium" lineHeight="none">
-            {cases}
-          </Box>
-          <Box fontSize="sm" fontWeight="medium">
-            Casos
-          </Box>
-        </Box>
-        <Box flex={1}>
-          <Box fontSize="2xl" fontWeight="medium" lineHeight="none">
-            {deaths}
-          </Box>
-          <Box fontSize="sm" fontWeight="medium">
-            Muertes
-          </Box>
-        </Box>
-      </Flex>
-    </Flex>
-  )
-}
+import {
+  Stat,
+  StatHelpText,
+  StatIcon,
+  StatLabel,
+  StatNumber,
+} from '../components/Stat'
 
 export default function Home({
   active,
@@ -136,9 +37,8 @@ export default function Home({
           p={4}
           spacing="auto"
         >
-          <Heading as="h1" fontSize={[`xl`, `2xl`]}>
-            <FontAwesomeIcon fixedWidth icon={[`fad`, `virus`]} />
-            {` `}
+          <FontAwesomeIcon fixedWidth icon={[`fad`, `virus`]} size="2x" />
+          <Heading as="h1" fontSize={[`xl`, `2xl`]} ml={2}>
             Nicaragua
           </Heading>
           <Link
@@ -154,12 +54,11 @@ export default function Home({
         as="main"
         margin="auto"
         maxWidth={theme.breakpoints[`xl`]}
-        mt={4}
         p={4}
         pb={8}
       >
         <Grid
-          gap={8}
+          gap={4}
           templateColumns={[
             null,
             `repeat(2, 1fr)`,
@@ -167,42 +66,50 @@ export default function Home({
             `repeat(3, 1fr)`,
           ]}
         >
-          <StatToday cases={today.cases} deaths={today.deaths} />
+          <Stat bg="indigo.500" color="white">
+            <StatIcon icon={[`fal`, `chart-bar`]} />
+            <StatLabel>Estadísticas de hoy</StatLabel>
+            <Stack isInline align="center" flex="auto" px={20} spacing="auto">
+              <Box>
+                <StatNumber>{today.cases}</StatNumber>
+                <StatHelpText>Casos</StatHelpText>
+              </Box>
+              <Box>
+                <StatNumber>{today.deaths}</StatNumber>
+                <StatHelpText>Muertes</StatHelpText>
+              </Box>
+            </Stack>
+          </Stat>
 
-          <Stat
-            color="black"
-            description=""
-            title="Casos confirmados"
-            value={cases}
-          />
+          <Stat bg="#f5f2ef">
+            <StatIcon icon={[`fal`, `check-double`]} />
+            <StatLabel>Casos confirmados</StatLabel>
+            <StatNumber>{cases}</StatNumber>
+          </Stat>
 
-          <Stat
-            color="yellow.400"
-            description="Pacientes actualmente infectados"
-            title="Casos activos"
-            value={active}
-          />
+          <Stat bg="yellow.100">
+            <StatIcon icon={[`fal`, `head-side-cough`]} />
+            <StatLabel>Casos activos</StatLabel>
+            <StatNumber>{active}</StatNumber>
+          </Stat>
 
-          <Stat
-            color="orange.400"
-            description="Pacientes actualmente infectados"
-            title="Casos críticos"
-            value={critical}
-          />
+          <Stat bg="orange.100">
+            <StatIcon icon={[`fal`, `lungs-virus`]} />
+            <StatLabel>Casos críticos</StatLabel>
+            <StatNumber>{critical}</StatNumber>
+          </Stat>
 
-          <Stat
-            color="green.400"
-            description="Pacientes actualmente infectados"
-            title="Casos recuperados"
-            value={recovered}
-          />
+          <Stat bg="green.100">
+            <StatIcon icon={[`fal`, `smile`]} />
+            <StatLabel>Casos recuperados</StatLabel>
+            <StatNumber>{recovered}</StatNumber>
+          </Stat>
 
-          <Stat
-            color="red.400"
-            description="Pacientes actualmente infectados"
-            title="Casos fallecidos"
-            value={deaths}
-          />
+          <Stat bg="red.100">
+            <StatIcon icon={[`fal`, `skull-crossbones`]} />
+            <StatLabel>Casos fallecidos</StatLabel>
+            <StatNumber>{deaths}</StatNumber>
+          </Stat>
         </Grid>
       </Box>
     </>
@@ -210,6 +117,10 @@ export default function Home({
 }
 
 export async function getStaticProps() {
+  const country = await got(
+    `https://corona.lmao.ninja/countries/nicaragua`
+  ).json()
+
   const {
     active,
     cases,
@@ -218,7 +129,7 @@ export async function getStaticProps() {
     recovered,
     todayCases,
     todayDeaths,
-  } = await covid.getCountry({country: `nicaragua`})
+  } = country
 
   return {
     props: {

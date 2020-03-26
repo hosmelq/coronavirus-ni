@@ -6,7 +6,7 @@ export default function GlobalCSS() {
     <Global
       styles={css`
         html {
-          background-color: #f6f7f9;
+          background-color: #fbfaf9;
         }
       `}
     />
