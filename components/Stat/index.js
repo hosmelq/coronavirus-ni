@@ -5,13 +5,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 export function Stat({color = `#585155`, ...props}) {
   return (
     <Flex
-      {...props}
       color={color}
       direction="column"
       minHeight={200}
       p={2}
       rounded="lg"
       shadow="sm"
+      {...props}
     />
   )
 }
@@ -21,23 +21,23 @@ export function StatIcon({color, icon}) {
 }
 
 export function StatLabel(props) {
-  return <Box {...props} fontSize="sm" fontWeight="medium" />
+  return <Box fontSize="sm" fontWeight="medium" {...props} />
 }
 
 export function StatNumber(props) {
   return (
     <Flex
-      {...props}
       align="center"
       flex="auto"
       justify="center"
       fontSize="4xl"
       fontWeight="medium"
       lineHeight="none"
+      {...props}
     />
   )
 }
 
 export function StatHelpText(props) {
-  return <Box {...props} fontSize="xs" fontWeight="medium" />
+  return <Box fontSize="xs" fontWeight="medium" {...props} />
 }
