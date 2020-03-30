@@ -68,13 +68,13 @@ export default function Home({
           <Stat bg="indigo.500" color="white">
             <StatIcon icon={[`fal`, `chart-bar`]} />
             <StatLabel>Estadísticas de hoy</StatLabel>
-            <Stack isInline align="center" flex="auto" px={20} spacing="auto">
-              <Box>
-                <StatNumber>{today.cases}</StatNumber>
+            <Stack isInline align="center" flex="auto" spacing="auto">
+              <Box flex={1}>
+                <StatNumber justify="flex-start">{today.cases}</StatNumber>
                 <StatHelpText>Casos</StatHelpText>
               </Box>
-              <Box>
-                <StatNumber>{today.deaths}</StatNumber>
+              <Box flex={1}>
+                <StatNumber justify="flex-start">{today.deaths}</StatNumber>
                 <StatHelpText>Muertes</StatHelpText>
               </Box>
             </Stack>
@@ -117,8 +117,9 @@ export default function Home({
       </Box>
 
       <Box color="#585155" mb={4} textAlign="center">
-        Última actualización{` `}
-        {format(new Date(lastUpdate), `d 'de' MMMM 'de' yyy`)}
+        Última actualización
+        <br />
+        {format(new Date(lastUpdate), `d 'de' MMMM 'de' yyy 'a las' hh:mm`)}
       </Box>
     </>
   )
