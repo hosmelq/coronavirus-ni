@@ -21,6 +21,7 @@ export default function Home({
   critical,
   cumulativeCases,
   deaths,
+  lastUpdate,
   recovered,
   today,
 }) {
@@ -54,7 +55,7 @@ export default function Home({
         </Stack>
       </Box>
 
-      <Box as="main" margin="auto" maxWidth={theme.breakpoints.xl} p={4} pb={8}>
+      <Box as="main" margin="auto" maxWidth={theme.breakpoints.xl} p={4}>
         <Grid
           gap={4}
           templateColumns={[
@@ -114,6 +115,11 @@ export default function Home({
           <CumulativeCasesChart data={cumulativeCases} />
         </Box>
       </Box>
+
+      <Box color="#585155" mb={4} textAlign="center">
+        Última actualización{` `}
+        {format(new Date(lastUpdate), `d 'de' MMMM 'de' yyy`)}
+      </Box>
     </>
   )
 }
@@ -159,6 +165,7 @@ export async function getStaticProps() {
       deaths,
       recovered,
       cumulativeCases: buildCumulativeCasesData(entries),
+      lastUpdate: new Date().toString(),
       today: {
         cases: new_cases,
         deaths: new_deaths,
