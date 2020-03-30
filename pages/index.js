@@ -1,9 +1,11 @@
+import {parseISO} from 'date-fns'
 import got from 'got'
 import React, {useEffect} from 'react'
 import ReactGA from 'react-ga'
 import {Box, Grid, Heading, Link, Stack, useTheme} from '@chakra-ui/core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
+import CumulativeCasesChart from '../components/CumulativeCasesChart'
 import {
   Stat,
   StatHelpText,
@@ -11,12 +13,15 @@ import {
   StatLabel,
   StatNumber,
 } from '../components/Stat'
+import {format} from '../utils/dateFns'
 
 export default function Home({
   active,
   cases,
   critical,
+  cumulativeCases,
   deaths,
+  lastUpdate,
   recovered,
   today,
 }) {
@@ -32,7 +37,7 @@ export default function Home({
         <Stack
           isInline
           align="center"
-          maxWidth={theme.breakpoints[`xl`]}
+          maxWidth={theme.breakpoints.xl}
           margin="auto"
           p={4}
           spacing="auto"
@@ -50,13 +55,7 @@ export default function Home({
         </Stack>
       </Box>
 
-      <Box
-        as="main"
-        margin="auto"
-        maxWidth={theme.breakpoints[`xl`]}
-        p={4}
-        pb={8}
-      >
+      <Box as="main" margin="auto" maxWidth={theme.breakpoints.xl} p={4}>
         <Grid
           gap={4}
           templateColumns={[
@@ -111,25 +110,52 @@ export default function Home({
             <StatNumber>{deaths}</StatNumber>
           </Stat>
         </Grid>
+
+        <Box mt={4}>
+          <CumulativeCasesChart data={cumulativeCases} />
+        </Box>
+      </Box>
+
+      <Box color="#585155" mb={4} textAlign="center">
+        Última actualización{` `}
+        {format(new Date(lastUpdate), `d 'de' MMMM 'de' yyy`)}
       </Box>
     </>
   )
 }
 
+function buildCumulativeCasesData(entries) {
+  const KEY_ID_MAP = {
+    cases: `Confirmados`,
+    deaths: `Fallecidos`,
+  }
+
+  return [`cases`, `deaths`].map((key) => {
+    const data = entries.map((entry) => ({
+      x: format(parseISO(entry.date), `d MMM`),
+      y: entry[key] || null,
+    }))
+
+    return {
+      data,
+      id: KEY_ID_MAP[key],
+    }
+  })
+}
+
 export async function getStaticProps() {
-  const country = await got(
-    `https://corona.lmao.ninja/countries/nicaragua`
-  ).json()
+  const entries = await got(`https://api.coronavirus-ni.com`).json()
+  const today = entries[entries.length - 1]
 
   const {
     active,
     cases,
     critical,
     deaths,
+    new_cases,
+    new_deaths,
     recovered,
-    todayCases,
-    todayDeaths,
-  } = country
+  } = today
 
   return {
     props: {
@@ -138,9 +164,11 @@ export async function getStaticProps() {
       critical,
       deaths,
       recovered,
+      cumulativeCases: buildCumulativeCasesData(entries),
+      lastUpdate: new Date().toString(),
       today: {
-        cases: todayCases,
-        deaths: todayDeaths,
+        cases: new_cases,
+        deaths: new_deaths,
       },
     },
   }
