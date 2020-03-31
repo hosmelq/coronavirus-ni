@@ -7,7 +7,9 @@ import '../icons'
 import theme from '../theme'
 import GlobalCSS from '../GlobalCSS'
 
-ReactGA.initialize(`UA-158975132-1`)
+ReactGA.initialize(`UA-158975132-1`, {
+  testMode: process.env.NODE_ENV !== `production`,
+})
 
 export default function App({Component, pageProps}) {
   return (
